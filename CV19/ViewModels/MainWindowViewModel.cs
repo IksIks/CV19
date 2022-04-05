@@ -5,11 +5,17 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using OxyPlot;
 using System;
+using System.Collections.ObjectModel;
+using CV19.Models.Decanat;
+using System.Linq;
 
 namespace CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+
+        public ObservableCollection<Group> Groups { get; }
+
         #region Тестовый набор данных для визуализации графиков
         private IEnumerable<DataPoint> testDataPoints;
         public IEnumerable<DataPoint> TestDataPoints
@@ -18,7 +24,6 @@ namespace CV19.ViewModels
             set { Set(ref testDataPoints, value); }
         } 
         #endregion
-
 
 
         #region Заголовок окна
@@ -46,6 +51,8 @@ namespace CV19.ViewModels
 
         #endregion
 
+        /*---------------------------------------------------------------------------------------------------------------*/
+
         #region Команды
 
         #region CloseAplicationCommand
@@ -60,6 +67,9 @@ namespace CV19.ViewModels
         #endregion
 
         #endregion
+
+        /*---------------------------------------------------------------------------------------------------------------*/
+
         public MainWindowViewModel()
         {
             CloseAplicationCommand = new LambdaCommand(OnCloseAplicationCommandExecuted, CanCloseAplicationCommandExecute);
@@ -72,6 +82,23 @@ namespace CV19.ViewModels
                 dataPoints.Add(new DataPoint (x ,y));
             }
             TestDataPoints = dataPoints;
+            int studentIndex = 1;
+            var students = Enumerable.Range(1, 10).Select(i => new Student
+            {
+                Name = $"Name {studentIndex}",
+                Surname = $"Surname {studentIndex}",
+                Patronymic = $"Patronymic {studentIndex++}",
+                Birthday = DateTime.Now,
+                Rating =0
+            });
+            var groups = Enumerable.Range(1, 20).Select(i => new Group
+            {
+                Name = $"Группа {i}",
+                Students = new ObservableCollection<Student>(students)
+            }) ;
+
+
+            Groups = new ObservableCollection<Group>(groups);
         }
     }
 }
