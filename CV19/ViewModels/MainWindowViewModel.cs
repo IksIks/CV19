@@ -15,6 +15,17 @@ namespace CV19.ViewModels
     {
 
         public ObservableCollection<Group> Groups { get; }
+        #region Selected Group: Group - выбранная группа
+        /// <summary> Выбранная группа </summary>
+        private Group selectedGroup;
+        /// <summary> Выбранная группа </summary>
+        public Group SelectedGroup
+        {
+            get { return selectedGroup; }
+            set { Set(ref selectedGroup, value); }
+        }
+
+        #endregion
 
         #region Тестовый набор данных для визуализации графиков
         private IEnumerable<DataPoint> testDataPoints;
