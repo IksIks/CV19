@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.com/icons/"
         xmlns:cmd="clr-namespace:CV19.Infrastructure.Commands"
+        xmlns:decanat="clr-namespace:CV19.Models.Decanat"
         xmlns:l="clr-namespace:CV19"
         mc:Ignorable="d"
         xmlns:oxy ="http://oxyplot.org/wpf"
@@ -52,13 +53,22 @@
                                  SelectedItem="{Binding SelectedGroup}" SelectedIndex="0"/>
                     </GroupBox>
                     <GroupBox Grid.Column="1" Header="{Binding SelectedGroup.Name, FallbackValue='Студенты', TargetNullValue='Группа не выбрана'}">
-                        <DataGrid ItemsSource="{Binding SelectedGroup.Students}" AutoGenerateColumns="False">
+                        <DataGrid ItemsSource="{Binding SelectedGroup.Students}" AutoGenerateColumns="False" GridLinesVisibility="Vertical"
+                                  AlternatingRowBackground="Orange" VerticalGridLinesBrush="Gray">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"/>
                                 <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
                                 <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}"/>
                                 <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}"/>
-                                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday, StringFormat=dd.mm.yyyy}"/>
+                                <!--<DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday, StringFormat=dd.mm.yyyy}"/>-->
+                                <DataGridTemplateColumn Header="Дата рождения">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="decanat:Student">
+                                            <DatePicker SelectedDate="{Binding Birthday}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Заметки" Binding="{Binding Description}" Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
