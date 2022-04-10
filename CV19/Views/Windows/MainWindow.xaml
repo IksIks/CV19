@@ -78,8 +78,15 @@
                     <GroupBox Header="Группы" Grid.Column="0">
                         <DockPanel>
                             <UniformGrid Rows="1" DockPanel.Dock="Bottom" Margin="0,3">
-                                <Button Content="Добавление" Command="{Binding CreateCroupCommand}" Margin="0,0,3,0"/>
-                                <Button Content="Удаление" Command="{Binding DeleteCroupCommand}"/>
+                                <UniformGrid.Resources>
+                                    <Style x:Key="ButtonStyle" TargetType="Button">
+                                        <Setter Property="Margin" Value="3,0"/>
+                                        <Setter Property="Padding" Value="3,5"/>
+                                        <Setter Property="Background" Value="White"/>
+                                    </Style>
+                                </UniformGrid.Resources>
+                                <Button Content="Добавление" Style="{StaticResource ButtonStyle} " Command="{Binding CreateCroupCommand}"/>
+                                <Button Content="Удаление" Style="{StaticResource ButtonStyle}" Command="{Binding DeleteCroupCommand}" CommandParameter="{Binding SelectedGroup}"/>
                             </UniformGrid>
                             <ListBox ItemsSource="{Binding Groups}"
                                  SelectedItem="{Binding SelectedGroup}" SelectedIndex="0">

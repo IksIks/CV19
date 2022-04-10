@@ -112,7 +112,10 @@ namespace CV19.ViewModels
         private void OnDeleteCroupCommandExecuted(object p)
         {
             if (!(p is Group group)) return;
+            var groupIndex = Groups.IndexOf(group);
             Groups.Remove(group);
+            if (groupIndex < Groups.Count)
+                SelectedGroup = Groups[groupIndex];
         } 
         #endregion
 
