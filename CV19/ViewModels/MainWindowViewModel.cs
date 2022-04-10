@@ -13,8 +13,18 @@ namespace CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        private object selectedCompositeValue;
+
+        public object SelectedCompositeValue
+        {
+            get { return selectedCompositeValue; }
+            set { Set(ref selectedCompositeValue, value); }
+        }
 
         public ObservableCollection<Group> Groups { get; }
+        public object[] CompositeCollection { get; }
+
+
         #region Selected Group: Group - выбранная группа
         /// <summary> Выбранная группа </summary>
         private Group selectedGroup;
@@ -67,6 +77,7 @@ namespace CV19.ViewModels
         #region Команды
 
         #region CloseAplicationCommand
+        /// <summary>Закрытие приложения</summary>
         public ICommand CloseAplicationCommand { get; }
 
         private void OnCloseAplicationCommandExecuted(object p)
@@ -74,7 +85,35 @@ namespace CV19.ViewModels
             Application.Current.Shutdown();
         }
         private bool CanCloseAplicationCommandExecute(object p) => true;
+        #endregion
 
+        #region Add Group
+        /// <summary>Добавление группы</summary>
+        public ICommand CreateCroupCommand { get; }
+        private bool CanCreateCroupCommandExecute(object p) => true;
+        private void OnCreateCroupCommandExecuted(object p)
+        {
+            var groupMaxIndex = Groups.Count + 1;
+            var newGroup = new Group
+            {
+                Name = $"Группа {groupMaxIndex}",
+                Students = new ObservableCollection<Student>()
+            };
+            Groups.Add(newGroup);
+        }
+        #endregion
+
+        #region DeleteGroup
+        /// <summary>
+        /// Удаление группы
+        /// </summary>
+        public ICommand DeleteCroupCommand { get; }
+        private bool CanDeleteCroupCommandCommandExecute(object p) => p is Group group && Groups.Contains(group);
+        private void OnDeleteCroupCommandExecuted(object p)
+        {
+            if (!(p is Group group)) return;
+            Groups.Remove(group);
+        } 
         #endregion
 
         #endregion
@@ -84,6 +123,9 @@ namespace CV19.ViewModels
         public MainWindowViewModel()
         {
             CloseAplicationCommand = new LambdaCommand(OnCloseAplicationCommandExecuted, CanCloseAplicationCommandExecute);
+            CreateCroupCommand = new LambdaCommand(OnCreateCroupCommandExecuted, CanCreateCroupCommandExecute);
+            DeleteCroupCommand = new LambdaCommand(OnDeleteCroupCommandExecuted, CanDeleteCroupCommandCommandExecute);
+
 
             var dataPoints = new List<DataPoint>((int) (360 / 0.1));
             for (var x = 0d; x <= 360; x++)
@@ -108,8 +150,17 @@ namespace CV19.ViewModels
                 Students = new ObservableCollection<Student>(students)
             }) ;
 
-
             Groups = new ObservableCollection<Group>(groups);
+
+            var dataList = new List<object>();
+            var group = Groups[1];
+            dataList.Add(group);
+            dataList.Add(group.Students[0]);
+            dataList.Add("Hello word");
+            dataList.Add(42);
+            CompositeCollection = dataList.ToArray();
+
+
         }
     }
 }
